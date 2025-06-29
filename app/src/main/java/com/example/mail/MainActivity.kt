@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val mailAdapter = MailAdapter(controller)
+        val dataSet = controller.loadMailsList()
+        val mailAdapter = MailAdapter(dataSet)
 
         val recyclerView: RecyclerView = findViewById(R.id.rcView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MailAdapter
+        recyclerView.adapter = mailAdapter
     }
 }
