@@ -3,8 +3,8 @@ package com.example.mail
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mail.controller.MailController
 
 class MainActivity : AppCompatActivity() {
@@ -16,5 +16,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        val dataSet = controller.loadMailsList()
+        val mailAdapter = MailAdapter(dataSet)
+
+        val recyclerView: RecyclerView = findViewById(R.id.rcView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = mailAdapter
     }
 }
