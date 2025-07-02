@@ -22,5 +22,6 @@ class MainActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.rcView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = mailAdapter
+
     }
 }
