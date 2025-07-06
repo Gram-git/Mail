@@ -32,8 +32,4 @@ class RecycleFragment : Fragment() {
         recyclerView.adapter = mailAdapter
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = RecycleFragment()
-    }
 }

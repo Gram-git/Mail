@@ -10,15 +10,16 @@ import com.example.mail.presentation.model.RecycleFragment
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        val fragment = RecycleFragment()
+
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.place_holder, RecycleFragment.newInstance())
+            .add(R.id.place_holder, fragment)
             .commit()
     }
 }
