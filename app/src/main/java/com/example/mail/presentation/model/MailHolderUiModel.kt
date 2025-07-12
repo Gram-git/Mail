@@ -5,7 +5,7 @@ data class MailHolderUiModel(
     val sender: SenderUiModel,
     val messageTitle: String,
     val message: String,
-    val isBookmarked: Boolean,
+    var isBookmarked: Boolean,
     val date: String,
     val isRead: Boolean
 )
