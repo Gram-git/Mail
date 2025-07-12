@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mail.presentation.model.MailHolderUiModel
@@ -19,7 +20,7 @@ class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
         val date: TextView
         val avatarIcon: ImageView
         val rootLayout: View = view.findViewById(R.id.main)
-//        val iconBookmarked: ImageView
+        val iconBookmarked: ImageView = view.findViewById(R.id.iconBookmarked)
 
         init {
             senderName = view.findViewById(R.id.senderName)
@@ -46,6 +47,19 @@ class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
         viewHolder.date.text = dataSet[position].date
         viewHolder.avatarIcon.setImageResource(dataSet[position].sender.fallbackAvatarRes)
 //        viewHolder.iconBookmarked.drawable = dataSet[position].isBookmarked
+        val context = viewHolder.itemView.context
+        val color = if (dataSet[position].isBookmarked) {
+            ContextCompat.getColor(context, R.color.holo_green_dark)
+        } else {
+            ContextCompat.getColor(context, R.color.black)
+        }
+        viewHolder.iconBookmarked.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
+
+        viewHolder.iconBookmarked.setOnClickListener {
+            dataSet[position].isBookmarked = !dataSet[position].isBookmarked
+            notifyItemChanged(position)
+        }
+
         viewHolder.rootLayout.setOnClickListener {
             Toast.makeText(
                 viewHolder.itemView.context,
