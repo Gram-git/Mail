@@ -28,7 +28,6 @@ class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
             message = view.findViewById(R.id.message)
             date = view.findViewById(R.id.date)
             avatarIcon = view.findViewById(R.id.avatarIconRes)
-//            iconBookmarked = view.findViewById(R.id.iconBookmarked)
         }
     }
 
@@ -46,7 +45,6 @@ class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
         viewHolder.message.text = dataSet[position].message
         viewHolder.date.text = dataSet[position].date
         viewHolder.avatarIcon.setImageResource(dataSet[position].sender.fallbackAvatarRes)
-//        viewHolder.iconBookmarked.drawable = dataSet[position].isBookmarked
         val context = viewHolder.itemView.context
         val color = if (dataSet[position].isBookmarked) {
             ContextCompat.getColor(context, R.color.holo_green_dark)
