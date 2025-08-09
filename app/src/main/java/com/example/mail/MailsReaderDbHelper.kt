@@ -25,15 +25,15 @@ class MailsReaderDbHelper(context: Context) :
                 "senderId INTEGER," +
                 "messageTitle TEXT," +
                 "message TEXT," +
-                "isBookmarked NUMERIC," +
+                "isBookmarked INTEGER," +
                 "date INTEGER," +
-                "isRead NUMERIC," +
+                "isRead INTEGER" +
                 ")"
 
         val CREATE_QUERY2 = "CREATE TABLE $table_name2 (" +
                 "id INTEGER UNIQUE PRIMARY KEY NOT NULL," +
                 "name TEXT," +
-                "avatarUrl TEXT," +
+                "avatarUrl TEXT" +
                 ")"
 
 
