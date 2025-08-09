@@ -7,29 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mail.presentation.model.MailHolderUiModel
 
-class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
+class MailAdapter :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val senderName: TextView
-        val messageTitle: TextView
-        val message: TextView
-        val date: TextView
-        val avatarIcon: ImageView
-        val rootLayout: View = view.findViewById(R.id.main)
-        val iconBookmarked: ImageView = view.findViewById(R.id.iconBookmarked)
 
-        init {
-            senderName = view.findViewById(R.id.senderName)
-            messageTitle = view.findViewById(R.id.messageTitle)
-            message = view.findViewById(R.id.message)
-            date = view.findViewById(R.id.date)
-            avatarIcon = view.findViewById(R.id.avatarIconRes)
-        }
-    }
+    var dataSet: List<MailHolderUiModel> = emptyList()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
@@ -69,5 +53,23 @@ class MailAdapter(private val dataSet: List<MailHolderUiModel>) :
     }
 
     override fun getItemCount() = dataSet.size
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val senderName: TextView
+        val messageTitle: TextView
+        val message: TextView
+        val date: TextView
+        val avatarIcon: ImageView
+        val rootLayout: View = view.findViewById(R.id.main)
+        val iconBookmarked: ImageView = view.findViewById(R.id.iconBookmarked)
+
+        init {
+            senderName = view.findViewById(R.id.senderName)
+            messageTitle = view.findViewById(R.id.messageTitle)
+            message = view.findViewById(R.id.message)
+            date = view.findViewById(R.id.date)
+            avatarIcon = view.findViewById(R.id.avatarIconRes)
+        }
+    }
 
 }
