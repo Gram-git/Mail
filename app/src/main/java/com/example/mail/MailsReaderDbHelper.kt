@@ -17,6 +17,7 @@ class MailsReaderDbHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         db.insert(table_name, null, values)
+        db.insert(table_name2, null, values)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -36,6 +37,7 @@ class MailsReaderDbHelper(context: Context) :
 }
 
 val table_name = "mails"
+val table_name2 = "users"
 
 val CREATE_QUERY = "CREATE TABLE $table_name (" +
         "id INTEGER UNIQUE PRIMARY KEY NOT NULL," +
@@ -47,7 +49,7 @@ val CREATE_QUERY = "CREATE TABLE $table_name (" +
         "isRead NUMERIC," +
         ""
 
-val CREATE_QUERY2 = "CREATE TABLE $table_name (" +
+val CREATE_QUERY2 = "CREATE TABLE $table_name2 (" +
         "id INTEGER UNIQUE PRIMARY KEY NOT NULL," +
         "name TEXT," +
         "avatarUrl TEXT," +
