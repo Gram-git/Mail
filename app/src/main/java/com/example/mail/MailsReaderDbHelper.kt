@@ -17,7 +17,7 @@ class MailsReaderDbHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         db.insert(table_name, null, values)
-        db.insert(table_name2, null, values)
+        db.insert(table_name2, null, values2)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -57,11 +57,17 @@ val CREATE_QUERY2 = "CREATE TABLE $table_name2 (" +
 
 
 val values = ContentValues().apply {
-    put("id", "1001L")
-    put("senderId", "2L")
+    put("id", "1001")
+    put("senderId", "2")
     put("messageTitle", "График собраний")
     put("message", "Проверь, пожалуйста, новую версию документа.")
     put("isBookmarked", "true")
     put("date", "1704208722416")
     put("isRead", "false")
+}
+
+val values2 = ContentValues().apply {
+    put("id", "2")
+    put("name", "Борис Петров")
+    put("avatarUrl", "null")
 }
