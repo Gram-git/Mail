@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
-
-
 class RecycleFragment : Fragment() {
     private var helper: MailsReaderDbHelper? = null
 

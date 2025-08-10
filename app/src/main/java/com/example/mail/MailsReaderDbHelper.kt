@@ -4,7 +4,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.example.mail.presentation.model.MailHolderUiModel
+import com.example.mail.presentation.model.SenderUiModel
+import com.example.mail.utls.DateUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,7 +15,6 @@ import kotlinx.coroutines.withContext
 class MailsReaderDbHelper(context: Context) :
     SQLiteOpenHelper(context, "Mail.db", null, 1) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val SQL_DELETE_ENTRIES_MAILS = "DROP TABLE IF EXISTS mails"
     private val SQL_DELETE_ENTRIES_USERS = "DROP TABLE IF EXISTS users"
 
@@ -71,7 +73,71 @@ class MailsReaderDbHelper(context: Context) :
     }
 
     suspend fun getMails(): List<MailHolderUiModel> = withContext(Dispatchers.IO) {
-        return@withContext emptyList()
+        val mails = mutableListOf<MailHolderUiModel>()
+        val cursor = readableDatabase.query(
+            "mails",
+            arrayOf("id", "senderId", "messageTitle", "message", "isBookmarked", "date", "isRead"),
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getLong(0)
+                val senderId = getLong(1)
+                val title = getString(2)
+                val message = getString(3)
+                val isBookmarked = getInt(4) == 1
+                val date = getLong(5)
+                val isRead = getInt(6) == 1
+
+                val selection = "id = ?"
+                val selectionArgs = arrayOf("$senderId")
+
+                var mail = MailHolderUiModel(
+                    id = id,
+                    sender = null,
+                    messageTitle = title,
+                    message = message,
+                    isBookmarked = isBookmarked,
+                    date = DateUtil.formatPrettyDate(date),
+                    isRead = isRead
+                )
+
+                val userCursor = readableDatabase.query(
+                    "users",
+                    arrayOf("id", "name", "avatarUrl"),
+                    selection, selectionArgs, null, null, null
+                )
+
+                while (userCursor.moveToNext()) {
+                    val userId = userCursor.getLong(0)
+                    val name = userCursor.getString(1)
+                    val avatarUrl = userCursor.getString(2)
+
+                    val sender = SenderUiModel(
+                        id = userId,
+                        name = name,
+                        avatarUrl = avatarUrl
+                    )
+
+                    userCursor.close()
+
+                    if (sender.id != 2L) {
+                        mail = mail.copy(sender = sender)
+                    }
+                }
+
+                mails += mail
+            }
+        }
+
+        cursor.close()
+
+        return@withContext mails
     }
 }
 
