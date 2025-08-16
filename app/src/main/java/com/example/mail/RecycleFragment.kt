@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RecycleFragment : Fragment() {
@@ -31,6 +32,12 @@ class RecycleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val mailAdapter = MailAdapter() //create
+
+        mailAdapter.onBookmarkPersist = { mailId, isBookmarked ->
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                helper?.setBookmarked(mailId, isBookmarked)
+            }
+        }
 
         lifecycleScope.launch {
             val loadedMails = helper?.getMails() //load data

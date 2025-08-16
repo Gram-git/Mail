@@ -14,10 +14,11 @@ class MailAdapter :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
 
     var dataSet: List<MailHolderUiModel> = emptyList()
-
+    var onBookmarkPersist: (mailId: Long, isBookmarked: Boolean) -> Unit = { _, _ -> }
     var onBookmarkClicked: (Int) -> Unit = { position ->
         dataSet[position].isBookmarked = !dataSet[position].isBookmarked
         notifyItemChanged(position)
+        onBookmarkPersist(dataSet[position].id, !dataSet[position].isBookmarked)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
