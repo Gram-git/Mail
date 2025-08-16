@@ -1,40 +1,12 @@
-package com.example.mail.controller
+package com.example.mail.utls
 
-import com.example.mail.presentation.model.MailHolderUiModel
-import com.example.mail.presentation.model.SenderUiModel
-import com.mail.api.model.MailDto
-import com.mail.api.model.UserDto
-import com.mail.api.repository.MailRepository
-import com.mail.impl.MailRepositoryImpl
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-internal class MailController {
-    private val repository: MailRepository = MailRepositoryImpl()
-
-    fun loadMailsList() = repository.loadMailsList().mapToHolderUiModel()
-
-    private fun List<MailDto>.mapToHolderUiModel() = map { dto ->
-        MailHolderUiModel(
-            id = dto.id,
-            sender = dto.sender.mapToSenderUiModel(),
-            messageTitle = dto.messageTitle,
-            message = dto.message,
-            isBookmarked = dto.isBookmarked,
-            date = formatPrettyDate(timestampMillis = dto.dateTimeMillis),
-            isRead = dto.isRead,
-        )
-    }
-
-    private fun UserDto.mapToSenderUiModel() = SenderUiModel(
-        id = id,
-        name = "$firstName $lastName",
-        avatarUrl = avatarUrl,
-    )
-
-    private fun formatPrettyDate(timestampMillis: Long): String {
+object DateUtil {
+    fun formatPrettyDate(timestampMillis: Long): String {
         val inputDate = Calendar.getInstance().apply { timeInMillis = timestampMillis }
         val now = Calendar.getInstance()
 
