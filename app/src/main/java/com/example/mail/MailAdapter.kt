@@ -38,10 +38,8 @@ class MailAdapter :
 //        viewHolder.avatarIcon.setImageResource(
 //            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 //        )
-        val item = dataSet[position]
-        val name = item.sender?.name
-        val avatarUrl = item.sender?.avatarUrl
-        val fallbackRes = item.sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
+        val avatarUrl = dataSet[position].sender?.avatarUrl
+        val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 
 // Не оборачиваем в ?.let — передаём nullable прямо в load()
         viewHolder.avatarIcon.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -50,7 +48,7 @@ class MailAdapter :
             placeholder(fallbackRes)
             error(fallbackRes)
             fallback(fallbackRes) // отобразится, если avatarUrl == null
-            transformations(CircleCropTransformation())
+            transformations(CircleCropTransformation())  // круглые аватарки
         }
 
         val context = viewHolder.itemView.context

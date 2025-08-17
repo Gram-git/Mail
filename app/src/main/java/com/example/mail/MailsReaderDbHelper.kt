@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MailsReaderDbHelper(context: Context) :
-    SQLiteOpenHelper(context, "Mail.db", null, 1) {
+    SQLiteOpenHelper(context, "Mail.db", null, 2) {
 
     private val SQL_DELETE_ENTRIES_MAILS = "DROP TABLE IF EXISTS mails"
     private val SQL_DELETE_ENTRIES_USERS = "DROP TABLE IF EXISTS users"
