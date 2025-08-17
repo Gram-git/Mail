@@ -81,36 +81,36 @@ class MailsReaderDbHelper(context: Context) :
         db.execSQL(
             """
         INSERT INTO $tableUsers (id, name, avatarUrl) VALUES
-        (1, 'Анна Иванова', NULL),
-        (2, 'Борис Петров', NULL),
-        (3, 'Светлана Кузнецова', NULL),
-        (4, 'Даниил Смирнов', NULL),
-        (5, 'Екатерина Орлова', NULL),
-        (6, 'Фёдор Новиков', NULL),
-        (7, 'Мария Соколова', NULL),
-        (8, 'Георгий Лебедев', NULL),
-        (9, 'Людмила Морозова', NULL),
-        (10, 'Александр Козлов', NULL),
-        (11, 'Ирина Федорова', NULL),
-        (12, 'Юрий Попов', NULL),
-        (13, 'Ольга Семенова', NULL),
-        (14, 'Михаил Волков', NULL),
-        (15, 'Наталья Зайцева', NULL),
-        (16, 'Роман Егоров', NULL),
-        (17, 'Татьяна Никитина', NULL),
-        (18, 'Виктор Макаров', NULL),
-        (19, 'Елена Андреева', NULL),
-        (20, 'Сергей Тихонов', NULL),
-        (21, 'Валерия Гаврилова', NULL),
-        (22, 'Григорий Данилов', NULL),
-        (23, 'Василиса Жукова', NULL),
-        (24, 'Павел Киселёв', NULL),
-        (25, 'Алиса Литвинова', NULL),
-        (26, 'Денис Мельников', NULL),
-        (27, 'Вера Назарова', NULL),
-        (28, 'Игорь Осипов', NULL),
-        (29, 'Полина Павлова', NULL),
-        (30, 'Аркадий Романов', NULL)
+        (1, 'Анна Иванова', 'https://i.pravatar.cc/200?img=1'),
+        (2, 'Борис Петров', 'https://i.pravatar.cc/200?img=2'),
+        (3, 'Светлана Кузнецова', 'https://i.pravatar.cc/200?img=3'),
+        (4, 'Даниил Смирнов', 'https://i.pravatar.cc/200?img=4'),
+        (5, 'Екатерина Орлова', 'https://i.pravatar.cc/200?img=5'),
+        (6, 'Фёдор Новиков', 'https://i.pravatar.cc/200?img=6'),
+        (7, 'Мария Соколова', 'https://i.pravatar.cc/200?img=7'),
+        (8, 'Георгий Лебедев', 'https://i.pravatar.cc/200?img=8'),
+        (9, 'Людмила Морозова', 'https://i.pravatar.cc/200?img=9'),
+        (10, 'Александр Козлов', 'https://i.pravatar.cc/200?img=10'),
+        (11, 'Ирина Федорова', 'https://i.pravatar.cc/200?img=11'),
+        (12, 'Юрий Попов', 'https://i.pravatar.cc/200?img=12'),
+        (13, 'Ольга Семенова', 'https://i.pravatar.cc/200?img=13'),
+        (14, 'Михаил Волков', 'https://i.pravatar.cc/200?img=14'),
+        (15, 'Наталья Зайцева', 'https://i.pravatar.cc/200?img=15'),
+        (16, 'Роман Егоров', 'https://i.pravatar.cc/200?img=16'),
+        (17, 'Татьяна Никитина', 'https://i.pravatar.cc/200?img=17'),
+        (18, 'Виктор Макаров', 'https://i.pravatar.cc/200?img=18'),
+        (19, 'Елена Андреева', 'https://i.pravatar.cc/200?img=19'),
+        (20, 'Сергей Тихонов', 'https://i.pravatar.cc/200?img=20'),
+        (21, 'Валерия Гаврилова', 'https://i.pravatar.cc/200?img=21'),
+        (22, 'Григорий Данилов', 'https://i.pravatar.cc/200?img=22'),
+        (23, 'Василиса Жукова', 'https://i.pravatar.cc/200?img=23'),
+        (24, 'Павел Киселёв', 'https://i.pravatar.cc/200?img=24'),
+        (25, 'Алиса Литвинова', 'https://i.pravatar.cc/200?img=25'),
+        (26, 'Денис Мельников', 'https://i.pravatar.cc/200?img=26'),
+        (27, 'Вера Назарова', 'https://i.pravatar.cc/200?img=27'),
+        (28, 'Игорь Осипов', 'https://i.pravatar.cc/200?img=28'),
+        (29, 'Полина Павлова', 'https://i.pravatar.cc/200?img=29'),
+        (30, 'Аркадий Романов', 'https://i.pravatar.cc/200?img=30')
     """.trimIndent()
         )
 
@@ -232,6 +232,7 @@ class MailsReaderDbHelper(context: Context) :
 
         return@withContext mails
     }
+
     fun setBookmarked(mailId: Long, isBookmarked: Boolean) {
         val cv = ContentValues().apply {
             put("isBookmarked", if (isBookmarked) 1 else 0)

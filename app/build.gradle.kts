@@ -48,4 +48,6 @@ dependencies {
 
     implementation(project(":data:api"))
     implementation(project(":data:impl"))
+
+    implementation("io.coil-kt:coil:2.7.0")
 }
