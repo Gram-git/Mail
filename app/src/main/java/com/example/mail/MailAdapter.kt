@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mail.presentation.model.MailHolderUiModel
+import coil.load
+import coil.transform.CircleCropTransformation
 
 class MailAdapter :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
@@ -18,7 +20,7 @@ class MailAdapter :
     var onBookmarkClicked: (Int) -> Unit = { position ->
         dataSet[position].isBookmarked = !dataSet[position].isBookmarked
         notifyItemChanged(position)
-        onBookmarkPersist(dataSet[position].id, !dataSet[position].isBookmarked)
+        onBookmarkPersist(dataSet[position].id, dataSet[position].isBookmarked)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -33,9 +35,22 @@ class MailAdapter :
         viewHolder.messageTitle.text = dataSet[position].messageTitle
         viewHolder.message.text = dataSet[position].message
         viewHolder.date.text = dataSet[position].date
-        viewHolder.avatarIcon.setImageResource(
-            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
-        )
+//        viewHolder.avatarIcon.setImageResource(
+//            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
+//        )
+        val avatarUrl = dataSet[position].sender?.avatarUrl
+        val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
+
+
+        viewHolder.avatarIcon.scaleType = ImageView.ScaleType.CENTER_CROP
+        viewHolder.avatarIcon.load(avatarUrl) {
+            crossfade(true)
+            placeholder(fallbackRes)
+            error(fallbackRes)
+            fallback(fallbackRes) // отобразится, если avatarUrl == null
+            transformations(CircleCropTransformation())  // круглые аватарки
+        }
+
         val context = viewHolder.itemView.context
         val color = if (dataSet[position].isBookmarked) {
             ContextCompat.getColor(context, R.color.holo_green_dark)
