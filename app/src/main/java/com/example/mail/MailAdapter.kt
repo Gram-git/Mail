@@ -42,7 +42,6 @@ class MailAdapter :
         val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 
 
-// Не оборачиваем в ?.let — передаём nullable прямо в load()
         viewHolder.avatarIcon.scaleType = ImageView.ScaleType.CENTER_CROP
         viewHolder.avatarIcon.load(avatarUrl) {
             crossfade(true)
