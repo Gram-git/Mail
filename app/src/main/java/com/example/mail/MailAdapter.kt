@@ -35,9 +35,6 @@ class MailAdapter :
         viewHolder.messageTitle.text = dataSet[position].messageTitle
         viewHolder.message.text = dataSet[position].message
         viewHolder.date.text = dataSet[position].date
-//        viewHolder.avatarIcon.setImageResource(
-//            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
-//        )
         val avatarUrl = dataSet[position].sender?.avatarUrl
         val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 
