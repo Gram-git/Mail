@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.place_holder, fragment)
             .commit()
     }
-
+//ad
     fun openDetail(title: String) {
         val fragment = DetailFragment()
 
