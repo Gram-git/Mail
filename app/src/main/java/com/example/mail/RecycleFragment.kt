@@ -39,6 +39,10 @@ class RecycleFragment : Fragment() {
             }
         }
 
+        mailAdapter.onMailClick = { title ->
+            (activity as? MainActivity)?.openDetail(title)
+        }
+
         lifecycleScope.launch {
             val loadedMails = helper?.getMails() //load data
 

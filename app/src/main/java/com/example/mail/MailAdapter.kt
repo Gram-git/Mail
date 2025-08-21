@@ -12,7 +12,7 @@ import com.example.mail.presentation.model.MailHolderUiModel
 import coil.load
 import coil.transform.CircleCropTransformation
 
-class MailAdapter :
+class MailAdapter() :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
 
     var dataSet: List<MailHolderUiModel> = emptyList()
@@ -22,7 +22,7 @@ class MailAdapter :
         notifyItemChanged(position)
         onBookmarkPersist(dataSet[position].id, dataSet[position].isBookmarked)
     }
-
+    var onMailClick: (String) -> Unit = {}
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_list_mail, viewGroup, false)
@@ -61,13 +61,12 @@ class MailAdapter :
         }
         viewHolder.iconBookmarked.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
         viewHolder.iconBookmarked.setImageDrawable(icon)
-        viewHolder.index = position
     }
 
     override fun getItemCount() = dataSet.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var index: Int = 0
+//        var index: Int = 0
         val senderName: TextView
         val messageTitle: TextView
         val message: TextView
@@ -84,15 +83,11 @@ class MailAdapter :
             avatarIcon = view.findViewById(R.id.avatarIconRes)
 
             iconBookmarked.setOnClickListener {
-                onBookmarkClicked(index)
+                onBookmarkClicked(adapterPosition)
             }
 
             rootLayout.setOnClickListener {
-                Toast.makeText(
-                    view.context,
-                    "Открытие письма: ${messageTitle.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                onMailClick(dataSet[adapterPosition].messageTitle)
             }
         }
     }
