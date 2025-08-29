@@ -204,5 +204,14 @@ class MailsReaderDbHelper(context: Context) :
             arrayOf(mailId.toString())
         )
     }
+
+    fun deleteById(mailId: Long) {
+        writableDatabase.delete(
+            "mails",
+            "id = ?",
+            arrayOf(mailId.toString())
+        )
+    }
+
 }
 
