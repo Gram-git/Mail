@@ -34,35 +34,43 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         val ivAvatar  = view.findViewById<ImageView>(R.id.ivAvatar)
         val btnStar   = view.findViewById<ImageButton>(R.id.btnStar)
 
-        // ----- данные из аргументов (есть только TITLE — остальное с дефолтами)
+        // --- 1) Читаем аргументы (дефолты на случай, если пока передаётся только TITLE)
         val args = arguments
-        tvSubject.text = args?.getString("TITLE").orEmpty()
-        tvSender.text  = args?.getString("SENDER_NAME") ?: "Максим Косенко"
-        tvDate.text    = args?.getString("DATE") ?: "02.12.2024"
-        tvBody.text    = args?.getString("BODY") ?: "Текст письма…"
+        val title      = args?.getString("TITLE").orEmpty()
+        val senderName = args?.getString("SENDER_NAME") ?: "Без отправителя"
+        val date       = args?.getString("DATE") ?: ""
+        val body       = args?.getString("BODY") ?: ""
+        val avatarUrl  = args?.getString("AVATAR_URL")
+        var starred    = args?.getBoolean("STARRED", false) ?: false
 
-        // Аватар (Coil)
-        val avatarUrl = args?.getString("AVATAR_URL")
+        // --- 2) Проставляем тексты
+        tvSubject.text = title
+        tvSender.text  = senderName
+        tvDate.text    = date
+        tvBody.text    = body
+
+        // --- 3) Грузим аватар через Coil (круглая обрезка + плейсхолдеры)
         ivAvatar.load(avatarUrl) {
             crossfade(true)
             placeholder(R.drawable.avatar_placeholder)
             error(R.drawable.avatar_error)
-            fallback(R.drawable.avatar_placeholder)
-            transformations(CircleCropTransformation())
+            fallback(R.drawable.avatar_placeholder) // если avatarUrl = null
+            transformations(coil.transform.CircleCropTransformation())
         }
 
-        // Звезда (локальный toggle)
-        var starred = args?.getBoolean("STARRED", false) ?: false
-        btnStar.setImageResource(
-            if (starred) R.drawable.baseline_star_24
-            else R.drawable.baseline_star_border_24
-        )
-        btnStar.setOnClickListener {
-            starred = !starred
+        // --- 4) Локальный toggle звезды
+        fun updateStarIcon() {
             btnStar.setImageResource(
                 if (starred) R.drawable.baseline_star_24
                 else R.drawable.baseline_star_border_24
             )
+        }
+        updateStarIcon()
+
+        btnStar.setOnClickListener {
+            starred = !starred
+            updateStarIcon()
+            // (на этом шаге только меняем иконку; запись в БД сделаем позже, в задачах 6/3)
         }
     }
 }

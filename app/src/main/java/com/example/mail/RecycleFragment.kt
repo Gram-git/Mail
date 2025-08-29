@@ -51,7 +51,7 @@ class RecycleFragment : Fragment() {
             mailAdapter.notifyDataSetChanged() //notify
         }
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.rcView)
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = mailAdapter
     }
