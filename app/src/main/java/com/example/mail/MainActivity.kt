@@ -16,19 +16,35 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.place_holder, fragment)
             .commit()
     }
-//ado
-    fun openDetail(title: String) {
+
+    //ado
+    fun openDetail(
+        mailId: Long,
+        title: String,
+        senderName: String,
+        date: String,
+        body: String,
+        avatarUrl: String?,
+        starred: Boolean
+    ) {
         val fragment = DetailFragment()
 
-        val bundle = Bundle()
-        bundle.putString("TITLE", title)
-
+        val bundle = Bundle().apply {
+            putLong("MAIL_ID", mailId)
+            putString("TITLE", title)
+            putString("SENDER_NAME", senderName)
+            putString("DATE", date)
+            putString("BODY", body)
+            putString("AVATAR_URL", avatarUrl)
+            putBoolean("STARRED", starred)
+        }
         fragment.arguments = bundle
 
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.place_holder, fragment)
+            .add(R.id.place_holder, fragment)   // можно оставить add; хочешь — сменим на replace
             .addToBackStack(null)
             .commit()
     }
+
 }

@@ -213,5 +213,17 @@ class MailsReaderDbHelper(context: Context) :
         )
     }
 
+    fun setRead(mailId: Long, isRead: Boolean) {
+        val cv = ContentValues().apply {
+            put("isRead", if (isRead) 1 else 0)
+        }
+        writableDatabase.update(
+            "mails",
+            cv,
+            "id = ?",
+            arrayOf(mailId.toString())
+        )
+    }
+
 }
 

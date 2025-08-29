@@ -1,5 +1,6 @@
 package com.example.mail
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ class MailAdapter() :
         notifyItemChanged(position)
         onBookmarkPersist(dataSet[position].id, dataSet[position].isBookmarked)
     }
-    var onMailClick: (String) -> Unit = {}
+    var onMailClick: (MailHolderUiModel) -> Unit = {}
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_list_mail, viewGroup, false)
@@ -33,10 +34,13 @@ class MailAdapter() :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.senderName.text = dataSet[position].sender?.name ?: "Неизвестно"
         viewHolder.messageTitle.text = dataSet[position].messageTitle
+        val isUnread = !dataSet[position].isRead
+        viewHolder.messageTitle.setTypeface(null, if (isUnread) Typeface.BOLD else Typeface.NORMAL)
         viewHolder.message.text = dataSet[position].message
         viewHolder.date.text = dataSet[position].date
         val avatarUrl = dataSet[position].sender?.avatarUrl
-        val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
+        val fallbackRes =
+            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 
 
         viewHolder.avatarIcon.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -66,7 +70,7 @@ class MailAdapter() :
     override fun getItemCount() = dataSet.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        var index: Int = 0
+        //        var index: Int = 0
         val senderName: TextView
         val messageTitle: TextView
         val message: TextView
@@ -83,11 +87,11 @@ class MailAdapter() :
             avatarIcon = view.findViewById(R.id.avatarIconRes)
 
             iconBookmarked.setOnClickListener {
-                onBookmarkClicked(adapterPosition)
+                if (adapterPosition != RecyclerView.NO_POSITION) onBookmarkClicked(adapterPosition)
             }
 
             rootLayout.setOnClickListener {
-                onMailClick(dataSet[adapterPosition].messageTitle)
+                if (adapterPosition != RecyclerView.NO_POSITION) onMailClick(dataSet[adapterPosition])
             }
         }
     }

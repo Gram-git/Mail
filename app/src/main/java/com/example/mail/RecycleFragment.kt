@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 
 class RecycleFragment : Fragment() {
     private var helper: MailsReaderDbHelper? = null
+    private lateinit var mailAdapter: MailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class RecycleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mailAdapter = MailAdapter() //create
+        mailAdapter = MailAdapter()
 
         mailAdapter.onBookmarkPersist = { mailId, isBookmarked ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -39,9 +40,18 @@ class RecycleFragment : Fragment() {
             }
         }
 
-        mailAdapter.onMailClick = { title ->
-            (activity as? MainActivity)?.openDetail(title)
+        mailAdapter.onMailClick = { mail ->
+            (activity as? MainActivity)?.openDetail(
+                mail.id,
+                mail.messageTitle,
+                mail.sender?.name ?: "Без отправителя",
+                mail.date,           // у тебя уже строка (DateUtil.formatPrettyDate)
+                mail.message,
+                mail.sender?.avatarUrl,
+                mail.isBookmarked
+            )
         }
+
 
         lifecycleScope.launch {
             val loadedMails = helper?.getMails() //load data
@@ -54,6 +64,15 @@ class RecycleFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = mailAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewLifecycleOwner.lifecycleScope.launch {
+            val loaded = helper?.getMails().orEmpty()
+            mailAdapter.dataSet = loaded
+            mailAdapter.notifyDataSetChanged()
+        }
     }
 
 }

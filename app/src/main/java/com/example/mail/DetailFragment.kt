@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     // DB helper (лениво, чтобы не создавать раньше времени)
@@ -55,6 +56,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         val body = args?.getString("BODY") ?: ""
         val avatarUrl = args?.getString("AVATAR_URL")
         var starred = args?.getBoolean("STARRED", false) ?: false
+
+        val mailId = arguments?.getLong("MAIL_ID", -1L) ?: -1L
+        if (mailId != -1L) {
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                db.setRead(mailId, true)
+            }
+        }
 
         // --- Проставляем тексты ---
         tvSubject.text = title
