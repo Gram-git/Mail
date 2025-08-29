@@ -181,9 +181,7 @@ class MailsReaderDbHelper(context: Context) :
 
                     userCursor.close()
 
-                    if (sender.id != 2L) {
-                        mail = mail.copy(sender = sender)
-                    }
+                    mail = mail.copy(sender = sender)
                 }
 
                 mails += mail
