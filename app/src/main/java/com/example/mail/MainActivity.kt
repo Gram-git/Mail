@@ -42,9 +42,11 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.place_holder, fragment)   // можно оставить add; хочешь — сменим на replace
+            .setReorderingAllowed(true)         // опционально, но полезно
+            .replace(R.id.place_holder, fragment) // <-- ЗАМЕНА
             .addToBackStack(null)
             .commit()
+
     }
 
 }

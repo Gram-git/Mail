@@ -27,7 +27,6 @@ class MailAdapter() :
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_list_mail, viewGroup, false)
-
         return ViewHolder(view)
     }
 

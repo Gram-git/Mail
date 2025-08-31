@@ -15,71 +15,62 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
-    // DB helper (лениво, чтобы не создавать раньше времени)
     private val db by lazy { MailsReaderDbHelper(requireContext()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // --- Top Bar ---
+        // --- Top Bar: назад + "Удалить"
         val toolbar = view.findViewById<MaterialToolbar>(R.id.toolbar_detail)
-        toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
-        }
+        toolbar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_delete -> {
-                    deleteMailAndExit()
-                    true
-                }
-
-                else -> false
-            }
+            if (item.itemId == R.id.action_delete) {
+                deleteMailAndExit()
+                true
+            } else false
         }
 
-        // --- Вьюхи контента ---
+        // --- Вьюхи
         val tvSubject = view.findViewById<TextView>(R.id.tvSubject)
-        val tvSender = view.findViewById<TextView>(R.id.tvSender)
-        val tvDate = view.findViewById<TextView>(R.id.tvDate)
-        val tvBody = view.findViewById<TextView>(R.id.tvBody)
-        val ivAvatar = view.findViewById<ImageView>(R.id.ivAvatar)
-        val btnStar = view.findViewById<ImageButton>(R.id.btnStar)
+        val tvSender  = view.findViewById<TextView>(R.id.tvSender)
+        val tvDate    = view.findViewById<TextView>(R.id.tvDate)
+        val tvBody    = view.findViewById<TextView>(R.id.tvBody)
+        val ivAvatar  = view.findViewById<ImageView>(R.id.ivAvatar)
+        val btnStar   = view.findViewById<ImageButton>(R.id.btnStar)
 
-        // --- Аргументы (дефолты оставляем на случай, если пока передаётся только TITLE) ---
+        // --- Аргументы
         val args = arguments
-        val title = args?.getString("TITLE").orEmpty()
+        val mailId     = args?.getLong("MAIL_ID", -1L) ?: -1L
+        val title      = args?.getString("TITLE").orEmpty()
         val senderName = args?.getString("SENDER_NAME") ?: "Без отправителя"
-        val date = args?.getString("DATE") ?: ""
-        val body = args?.getString("BODY") ?: ""
-        val avatarUrl = args?.getString("AVATAR_URL")
-        var starred = args?.getBoolean("STARRED", false) ?: false
+        val date       = args?.getString("DATE") ?: ""
+        val body       = args?.getString("BODY") ?: ""
+        val avatarUrl  = args?.getString("AVATAR_URL")
+        var starred    = args?.getBoolean("STARRED", false) ?: false
 
-        val mailId = arguments?.getLong("MAIL_ID", -1L) ?: -1L
+        // --- (6) Пометить как прочитанное
         if (mailId != -1L) {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 db.setRead(mailId, true)
             }
         }
 
-        // --- Проставляем тексты ---
+        // --- Подставляем данные
         tvSubject.text = title
-        tvSender.text = senderName
-        tvDate.text = date
-        tvBody.text = body
+        tvSender.text  = senderName
+        tvDate.text    = date
+        tvBody.text    = body
 
-        // --- Аватар (Coil) ---
         ivAvatar.load(avatarUrl) {
             crossfade(true)
             placeholder(R.drawable.avatar_placeholder)
             error(R.drawable.avatar_error)
-            fallback(R.drawable.avatar_placeholder) // если avatarUrl = null
+            fallback(R.drawable.avatar_placeholder)
             transformations(CircleCropTransformation())
         }
 
-        // --- Звезда (локальный toggle) ---
         fun updateStarIcon() {
             btnStar.setImageResource(
                 if (starred) R.drawable.baseline_star_24
@@ -91,31 +82,24 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         btnStar.setOnClickListener {
             starred = !starred
             updateStarIcon()
-            // сохранение в БД сделаем на шаге с "прочитанным/избранным"
+            if (mailId != -1L) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    db.setBookmarked(mailId, starred)
+                }
+            }
         }
     }
 
     private fun deleteMailAndExit() {
         val mailId = arguments?.getLong("MAIL_ID", -1L) ?: -1L
         if (mailId == -1L) {
-            Toast.makeText(
-                requireContext(),
-                "Нет ID письма — удаление недоступно",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Нет ID письма — удаление недоступно", Toast.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack()
             return
         }
-
-        // Удаляем в фоне, возвращаемся на главный экран на главном потоке
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                db.deleteById(mailId)
-            } catch (_: Exception) { /* можно залогировать */
-            }
-            withContext(Dispatchers.Main) {
-                parentFragmentManager.popBackStack()
-            }
+            db.deleteById(mailId)
+            withContext(Dispatchers.Main) { parentFragmentManager.popBackStack() }
         }
     }
 }
