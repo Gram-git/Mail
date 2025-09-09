@@ -20,38 +20,6 @@ class MailsReaderDbHelper(context: Context) :
         val tableMails = "mails"
         val tableUsers = "users"
 
-//        val CREATE_MAILS = "CREATE TABLE $tableMails (" +
-//                "id INTEGER UNIQUE PRIMARY KEY NOT NULL," +
-//                "senderId INTEGER," +
-//                "messageTitle TEXT," +
-//                "message TEXT," +
-//                "isBookmarked INTEGER," +
-//                "date INTEGER," +
-//                "isRead INTEGER" +
-//                ")"
-//
-//        val CREATE_USERS = "CREATE TABLE $tableUsers (" +
-//                "id INTEGER UNIQUE PRIMARY KEY NOT NULL," +
-//                "name TEXT," +
-//                "avatarUrl TEXT" +
-//                ")"
-//
-//
-//        val valuesMail = ContentValues().apply {
-//            put("id", 1001)
-//            put("senderId", 2)
-//            put("messageTitle", "График собраний")
-//            put("message", "Проверь, пожалуйста, новую версию документа.")
-//            put("isBookmarked", 1)
-//            put("date", 1704208722416)
-//            put("isRead", 0)
-//        }
-//
-//        val valuesUser = ContentValues().apply {
-//            put("id", 2)
-//            put("name", "Борис Петров")
-//            putNull("avatarUrl")
-//        }
         db.execSQL(
             """
         CREATE TABLE IF NOT EXISTS $tableUsers (
@@ -76,8 +44,6 @@ class MailsReaderDbHelper(context: Context) :
         )
     """.trimIndent()
         )
-//        db.execSQL(CREATE_MAILS)
-//        db.execSQL(CREATE_USERS)
         db.execSQL(
             """
         INSERT INTO $tableUsers (id, name, avatarUrl) VALUES
@@ -149,13 +115,9 @@ class MailsReaderDbHelper(context: Context) :
         (1000, 1, 'Добро пожаловать', 'Привет! Рад видеть тебя в команде.', 0, 17098723416, 1)
     """.trimIndent()
         )
-//        db.insert(tableMails, null, valuesMail)
-//        db.insert(tableUsers, null, valuesUser)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES_MAILS)
         db.execSQL(SQL_DELETE_ENTRIES_USERS)
         onCreate(db)
@@ -219,9 +181,7 @@ class MailsReaderDbHelper(context: Context) :
 
                     userCursor.close()
 
-                    if (sender.id != 2L) {
-                        mail = mail.copy(sender = sender)
-                    }
+                    mail = mail.copy(sender = sender)
                 }
 
                 mails += mail
@@ -244,5 +204,26 @@ class MailsReaderDbHelper(context: Context) :
             arrayOf(mailId.toString())
         )
     }
+
+    fun deleteById(mailId: Long) {
+        writableDatabase.delete(
+            "mails",
+            "id = ?",
+            arrayOf(mailId.toString())
+        )
+    }
+
+    fun setRead(mailId: Long, isRead: Boolean) {
+        val cv = ContentValues().apply {
+            put("isRead", if (isRead) 1 else 0)
+        }
+        writableDatabase.update(
+            "mails",
+            cv,
+            "id = ?",
+            arrayOf(mailId.toString())
+        )
+    }
+
 }
 

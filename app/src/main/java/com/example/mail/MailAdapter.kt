@@ -1,5 +1,6 @@
 package com.example.mail
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.example.mail.presentation.model.MailHolderUiModel
 import coil.load
 import coil.transform.CircleCropTransformation
 
-class MailAdapter :
+class MailAdapter() :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
 
     var dataSet: List<MailHolderUiModel> = emptyList()
@@ -22,24 +23,23 @@ class MailAdapter :
         notifyItemChanged(position)
         onBookmarkPersist(dataSet[position].id, dataSet[position].isBookmarked)
     }
-
+    var onMailClick: (MailHolderUiModel) -> Unit = {}
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_list_mail, viewGroup, false)
-
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.senderName.text = dataSet[position].sender?.name ?: "Неизвестно"
         viewHolder.messageTitle.text = dataSet[position].messageTitle
+        val isUnread = !dataSet[position].isRead
+        viewHolder.messageTitle.setTypeface(null, if (isUnread) Typeface.BOLD else Typeface.NORMAL)
         viewHolder.message.text = dataSet[position].message
         viewHolder.date.text = dataSet[position].date
-//        viewHolder.avatarIcon.setImageResource(
-//            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
-//        )
         val avatarUrl = dataSet[position].sender?.avatarUrl
-        val fallbackRes = dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
+        val fallbackRes =
+            dataSet[position].sender?.fallbackAvatarRes ?: R.drawable.outline_android_24
 
 
         viewHolder.avatarIcon.scaleType = ImageView.ScaleType.CENTER_CROP
@@ -64,13 +64,12 @@ class MailAdapter :
         }
         viewHolder.iconBookmarked.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
         viewHolder.iconBookmarked.setImageDrawable(icon)
-        viewHolder.index = position
     }
 
     override fun getItemCount() = dataSet.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var index: Int = 0
+        //        var index: Int = 0
         val senderName: TextView
         val messageTitle: TextView
         val message: TextView
@@ -87,15 +86,11 @@ class MailAdapter :
             avatarIcon = view.findViewById(R.id.avatarIconRes)
 
             iconBookmarked.setOnClickListener {
-                onBookmarkClicked(index)
+                if (adapterPosition != RecyclerView.NO_POSITION) onBookmarkClicked(adapterPosition)
             }
 
             rootLayout.setOnClickListener {
-                Toast.makeText(
-                    view.context,
-                    "Открытие письма: ${messageTitle.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                if (adapterPosition != RecyclerView.NO_POSITION) onMailClick(dataSet[adapterPosition])
             }
         }
     }
