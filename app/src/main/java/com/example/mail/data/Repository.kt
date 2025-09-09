@@ -9,7 +9,7 @@ class Repository(
         return dbHelper.getMails()
     }
 
-    fun setBookmarked(mailId: Long, isBookmarked: Boolean) {
-        return dbHelper.setBookmarked(mailId, isBookmarked)
+    suspend fun setBookmarked(mailId: Long, isBookmarked: Boolean) {
+        dbHelper.setBookmarked(mailId, isBookmarked)
     }
 }
