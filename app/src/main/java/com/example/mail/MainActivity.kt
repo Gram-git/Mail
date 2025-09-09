@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    //ado
+    //  ado
     fun openDetail(
         mailId: Long,
         title: String,
