@@ -2,6 +2,7 @@ package com.example.mail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mail.presentation.main_screen.RecycleFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    //ado
+    //  ado
     fun openDetail(
         mailId: Long,
         title: String,
