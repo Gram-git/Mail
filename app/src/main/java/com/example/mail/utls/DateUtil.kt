@@ -13,7 +13,6 @@ object DateUtil {
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val dayOfWeekFormat = SimpleDateFormat("E", Locale("ru"))
         val shortMonthFormat = SimpleDateFormat("MMM", Locale("ru"))
-        val dayMonthFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
         val fullDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
         fun isSameDay(cal1: Calendar, cal2: Calendar): Boolean {
