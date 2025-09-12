@@ -1,4 +1,4 @@
-package com.example.mail
+package com.example.mail.data
 
 import android.content.ContentValues
 import android.content.Context
@@ -193,7 +193,7 @@ class MailsReaderDbHelper(context: Context) :
         return@withContext mails
     }
 
-    fun setBookmarked(mailId: Long, isBookmarked: Boolean) {
+    suspend fun setBookmarked(mailId: Long, isBookmarked: Boolean) = withContext(Dispatchers.IO) {
         val cv = ContentValues().apply {
             put("isBookmarked", if (isBookmarked) 1 else 0)
         }

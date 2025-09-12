@@ -1,4 +1,4 @@
-package com.example.mail
+package com.example.mail.presentation.main_screen
 
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mail.presentation.model.MailHolderUiModel
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.example.mail.R
 
 class MailAdapter() :
     RecyclerView.Adapter<MailAdapter.ViewHolder>() {
