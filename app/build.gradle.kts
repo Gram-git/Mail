@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
 }
 
 android {
@@ -51,9 +50,4 @@ dependencies {
     implementation(project(":data:impl"))
 
     implementation("io.coil-kt:coil:2.7.0")
-
-    val lifecycle_version = "2.9.3"
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
 }
